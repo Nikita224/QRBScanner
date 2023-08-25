@@ -54,8 +54,6 @@ fun ScanQRCardStart(scanCount: Int, onScanClick: (scanCount: Int) -> Unit) {
     }
 }
 
-
-
 @Preview
 @Composable
 fun ScanQRaCardPreview() {

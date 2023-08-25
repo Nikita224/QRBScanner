@@ -39,7 +39,9 @@ class MainActivity : ComponentActivity() {
     @ExperimentalPermissionsApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val passedParameter = intent.getStringExtra(EXTRA_PARAMETER)
         setContent {
+
             val context = LocalContext.current
             val bottomSheetScaffoldState =
                 rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
@@ -109,6 +111,9 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    companion object {
+        const val EXTRA_PARAMETER = "extra_parameter"
+    }
     private fun insertScannedContentIntoDatabase(scannedContent: String) {
         GlobalScope.launch(Dispatchers.IO) {
             try {
@@ -124,12 +129,26 @@ class MainActivity : ComponentActivity() {
                 )
                 statement.setString(1, scannedContent)
                 statement.executeUpdate()
-                Toast.makeText(applicationContext,"Добавлен скан: $scannedContent", Toast.LENGTH_SHORT).show()
+
+                launch(Dispatchers.Main) {
+                    Toast.makeText(
+                        applicationContext,
+                        "Добавлен скан: $scannedContent",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
                 connection.close()
             } catch (e: Exception) {
                 e.printStackTrace()
-                Log.e("DatabaseError", "Failed to insert into the database", e)
-                Toast.makeText(applicationContext,"Не удалось сохранить скан!\nПроверьте подключение к сети и попробуйте снова", Toast.LENGTH_SHORT).show()
+                //Log.e("DatabaseError", "Failed to insert into the database", e)
+
+                launch(Dispatchers.Main) {
+                    Toast.makeText(
+                        applicationContext,
+                        "Не удалось сохранить скан!\nПроверьте подключение к сети и попробуйте снова",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
         }
     }

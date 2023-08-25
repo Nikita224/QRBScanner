@@ -18,22 +18,22 @@ import androidx.compose.ui.unit.dp
 import io.github.kirillov.qrscanner.ui.theme.QRScannerTheme
 
 @Composable
-fun MainScreen(onScanClick: (scanCount: Int) -> Unit = {}) {
+fun MainScreen(onScanClick: () -> Unit = {}) {
     Column {
-        for (i in 1..3) {
-            ScanQRCard(i, onScanClick)
-        }
+
+            ScanQRCard(onScanClick)
+
     }
 }
 
 @Composable
-fun ScanQRCard(scanCount: Int, onScanClick: (scanCount: Int) -> Unit) {
+fun ScanQRCard(onScanClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
             .clickable {
-                onScanClick(scanCount)
+                onScanClick()
             },
     ) {
         Row(
@@ -45,7 +45,7 @@ fun ScanQRCard(scanCount: Int, onScanClick: (scanCount: Int) -> Unit) {
                 contentDescription = "QR Code Icon"
             )
             Text(
-                text = "$scanCount Scan a QR/Bar Code",
+                text = "Сканировать штрихкод",
                 modifier = Modifier
                     .align(Alignment.CenterVertically)
                     .padding(top = 16.dp, end = 16.dp, bottom = 16.dp)
@@ -60,6 +60,6 @@ fun ScanQRCard(scanCount: Int, onScanClick: (scanCount: Int) -> Unit) {
 @Composable
 fun ScanQRCardPreview() {
     QRScannerTheme {
-        ScanQRCard(1) {}
+        ScanQRCard() {}
     }
 }
