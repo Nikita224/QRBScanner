@@ -39,7 +39,7 @@ class MainActivity : ComponentActivity() {
     @ExperimentalPermissionsApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val passedParameter = intent.getStringExtra(EXTRA_PARAMETER)
+        val parameterValue = intent.getStringExtra("PARAM_KEY")
         setContent {
 
             val context = LocalContext.current
@@ -52,7 +52,7 @@ class MainActivity : ComponentActivity() {
             ) { result ->
                 result.qrCodeContent?.let { scannedContent ->
                     //TODO: Handle Content
-                    insertScannedContentIntoDatabase(scannedContent)
+                    insertScannedContentIntoDatabase(scannedContent, parameterValue.toString())
 
                 }
             }
@@ -114,7 +114,7 @@ class MainActivity : ComponentActivity() {
     companion object {
         const val EXTRA_PARAMETER = "extra_parameter"
     }
-    private fun insertScannedContentIntoDatabase(scannedContent: String) {
+    private fun insertScannedContentIntoDatabase(scannedContent: String, numberOfCollect: String) {
         GlobalScope.launch(Dispatchers.IO) {
             try {
                 Class.forName("com.mysql.jdbc.Driver")
@@ -125,9 +125,10 @@ class MainActivity : ComponentActivity() {
                 )
 
                 val statement = connection.prepareStatement(
-                    "INSERT INTO qwe (Name, Date, Time) VALUES (?, NOW(), CURTIME())"
+                    "INSERT INTO qwe (Name, CollectNumber, Date, Time) VALUES (?, ?, NOW(), CURTIME())"
                 )
                 statement.setString(1, scannedContent)
+                statement.setString(2, numberOfCollect)
                 statement.executeUpdate()
 
                 launch(Dispatchers.Main) {
