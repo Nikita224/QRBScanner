@@ -19,7 +19,7 @@
         <activity
             android:name=".PreLoadActivity"
             android:exported="true"
-            android:label="@string/title_activity_pre_load"
+            android:label="Сканер для склада"
             android:theme="@style/Theme.QRScanner">
 
             <intent-filter>

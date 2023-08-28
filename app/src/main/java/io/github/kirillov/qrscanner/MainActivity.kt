@@ -53,7 +53,6 @@ class MainActivity : ComponentActivity() {
                 result.qrCodeContent?.let { scannedContent ->
                     //TODO: Handle Content
                     insertScannedContentIntoDatabase(scannedContent, parameterValue.toString())
-
                 }
             }
             val cameraPermissionState = rememberPermissionState(
