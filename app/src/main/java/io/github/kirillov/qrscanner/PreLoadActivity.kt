@@ -8,6 +8,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.rounded.Add
@@ -82,11 +84,9 @@ class PreLoadActivity : ComponentActivity() {
 
 @Composable
 fun PreMainScreen(taskNames: Array<String>, onClick: (scanCount: String) -> Unit = {}) {
-    val currentState = rememberUpdatedState(taskNames)
-
-    Column {
-        for (i in currentState.value.indices) {
-            Greeting(currentState.value[i], onClick)
+    LazyColumn {
+        items(taskNames) { taskName ->
+            Greeting(taskName, onClick)
         }
     }
 }
