@@ -12,6 +12,7 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import com.google.mlkit.vision.barcode.BarcodeScanner
 import com.google.mlkit.vision.barcode.BarcodeScanning
+import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
 import io.github.kirillov.qrscanner.R
 import io.github.kirillov.qrscanner.databinding.ActivityBarcodeScannerBinding
@@ -158,12 +159,23 @@ class BarcodeScannerActivity : AppCompatActivity() {
 
             barcodeScanner.process(inputImage)
                 .addOnSuccessListener { barcodes ->
-                    barcodes.forEach { barcode ->
-                        val resultIntent = Intent().apply {
-                            this.putExtra(BARCODE_QR_CONTENT, barcode.rawValue)
+                    val code39Barcodes = barcodes.filter { barcode ->
+                        barcode.format == Barcode.FORMAT_CODE_39
+                    }
+
+                    if (code39Barcodes.isNotEmpty()) {
+                        // Process Code 39 barcodes here
+                        for (barcode in code39Barcodes) {
+                            val code39Content = barcode.rawValue
+                            // Handle the Code 39 barcode content as needed
+                            val resultIntent = Intent().apply {
+                                this.putExtra(BARCODE_QR_CONTENT, code39Content)
+                            }
+                            setResult(Activity.RESULT_OK, resultIntent)
+                            finish()
                         }
-                        setResult(Activity.RESULT_OK, resultIntent)
-                        finish()
+                    } else {
+                        // No Code 39 barcodes found
                     }
                 }
                 .addOnFailureListener { error ->
